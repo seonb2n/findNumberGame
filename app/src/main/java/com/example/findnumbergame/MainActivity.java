@@ -1,15 +1,21 @@
 package com.example.findnumbergame;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView textViewScore;
     TextView textViewTimer;
+    TextView textViewTarget;
 
     Button button1;
     Button button2;
@@ -32,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
     Button button19;
     Button button20;
 
+    Button buttonStart;
+
+    private CountDownTimer countDownTimer;
+    private int MILLISINFUTURE = 30 * 1000;
+    private int COUN_DONW_INTEVAL = 1000;
+    private int count = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         textViewScore = findViewById(R.id.textViewScore);
         textViewTimer = findViewById(R.id.textViewTimer);
+        textViewTarget = findViewById(R.id.textViewTarget);
 
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
@@ -62,8 +75,65 @@ public class MainActivity extends AppCompatActivity {
         button19 = findViewById(R.id.button19);
         button20 = findViewById(R.id.button20);
 
+        buttonStart = findViewById(R.id.buttonStart);
 
+        buttonStart.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                gameStart();
+            }
+        });
+
+    }
+
+    public void gameStart() {
+        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(MainActivity.this);
+        myAlertBuilder.setTitle("Game Over");
+        myAlertBuilder.setMessage("Click RANK To Rank, or Cancel to stop");
+        myAlertBuilder.setPositiveButton("RANK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "pressed Rank", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        myAlertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                textViewTimer.setText(String.valueOf(30));
+                count = 30;
+            }
+        });
+
+        countDownTimer(myAlertBuilder);
+        countDownTimer.start();
 
 
     }
+
+    public void countDownTimer(final AlertDialog.Builder myAlertBuilder) {
+        countDownTimer = new CountDownTimer(MILLISINFUTURE, COUN_DONW_INTEVAL) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                textViewTimer.setText(String.valueOf(count));
+                count--;
+            }
+            @Override
+            public void onFinish() {
+                textViewTimer.setText(String.valueOf("Finish"));
+                myAlertBuilder.show();
+            }
+        };
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            countDownTimer.cancel();
+        } catch (Exception e) {}
+        countDownTimer = null;
+    }
+
+
+
 }
