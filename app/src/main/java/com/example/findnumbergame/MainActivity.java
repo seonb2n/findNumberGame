@@ -17,33 +17,22 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewTimer;
     TextView textViewTarget;
 
-    Button button1;
-    Button button2;
-    Button button3;
-    Button button4;
-    Button button5;
-    Button button6;
-    Button button7;
-    Button button8;
-    Button button9;
-    Button button10;
-    Button button11;
-    Button button12;
-    Button button13;
-    Button button14;
-    Button button15;
-    Button button16;
-    Button button17;
-    Button button18;
-    Button button19;
-    Button button20;
-
+    Button[] buttons = new Button[20];
     Button buttonStart;
 
     private CountDownTimer countDownTimer;
     private int MILLISINFUTURE = 30 * 1000;
     private int COUN_DONW_INTEVAL = 1000;
-    private int count = 30;
+    private static int count = 30;
+
+    int[] buttonNumber = new int[20];
+
+    boolean playable = true;
+
+    static int score;
+    static int targetNumber = 0;
+
+    Button.OnClickListener clickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,63 +43,128 @@ public class MainActivity extends AppCompatActivity {
         textViewTimer = findViewById(R.id.textViewTimer);
         textViewTarget = findViewById(R.id.textViewTarget);
 
-        button1 = findViewById(R.id.button1);
-        button2 = findViewById(R.id.button2);
-        button3 = findViewById(R.id.button3);
-        button4 = findViewById(R.id.button4);
-        button5 = findViewById(R.id.button5);
-        button6 = findViewById(R.id.button6);
-        button7 = findViewById(R.id.button7);
-        button8 = findViewById(R.id.button8);
-        button9 = findViewById(R.id.button9);
-        button10 = findViewById(R.id.button10);
-        button11 = findViewById(R.id.button11);
-        button12 = findViewById(R.id.button12);
-        button13 = findViewById(R.id.button13);
-        button14 = findViewById(R.id.button14);
-        button15 = findViewById(R.id.button15);
-        button16 = findViewById(R.id.button16);
-        button17 = findViewById(R.id.button17);
-        button18 = findViewById(R.id.button18);
-        button19 = findViewById(R.id.button19);
-        button20 = findViewById(R.id.button20);
+        buttons[0] = findViewById(R.id.button1);
+        buttons[1] = findViewById(R.id.button2);
+        buttons[2] = findViewById(R.id.button3);
+        buttons[3] = findViewById(R.id.button4);
+        buttons[4] = findViewById(R.id.button5);
+        buttons[5] = findViewById(R.id.button6);
+        buttons[6] = findViewById(R.id.button7);
+        buttons[7] = findViewById(R.id.button8);
+        buttons[8] = findViewById(R.id.button9);
+        buttons[9] = findViewById(R.id.button10);
+        buttons[10] = findViewById(R.id.button11);
+        buttons[11] = findViewById(R.id.button12);
+        buttons[12] = findViewById(R.id.button13);
+        buttons[13]= findViewById(R.id.button14);
+        buttons[14] = findViewById(R.id.button15);
+        buttons[15] = findViewById(R.id.button16);
+        buttons[16] = findViewById(R.id.button17);
+        buttons[17] = findViewById(R.id.button18);
+        buttons[18] = findViewById(R.id.button19);
+        buttons[19] = findViewById(R.id.button20);
 
         buttonStart = findViewById(R.id.buttonStart);
 
+        for(int i = 0; i<20; i++) {
+            buttonNumber[i] = i+1;
+            buttons[i].setBackgroundColor(0xFFDADADA);
+        }
+
+        shuffle(buttonNumber);
+        setButtonNumber(buttonNumber);
+
         buttonStart.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
+                gameReset();
+                targetNumber = (int)(Math.random() * 20) + 1;
+                textViewTarget.setText(String.valueOf(targetNumber));
                 gameStart();
             }
         });
 
+        clickListener = new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.button1:
+                        targetNumber = gameCycle(targetNumber, buttons[0]);
+                        break;
+                    case R.id.button2:
+                        targetNumber = gameCycle(targetNumber, buttons[1]);
+                        break;
+                    case R.id.button3:
+                        targetNumber = gameCycle(targetNumber, buttons[2]);
+                        break;
+                    case R.id.button4:
+                        targetNumber = gameCycle(targetNumber, buttons[3]);
+                        break;
+                    case R.id.button5:
+                        targetNumber = gameCycle(targetNumber, buttons[4]);
+                        break;
+                    case R.id.button6:
+                        targetNumber = gameCycle(targetNumber, buttons[5]);
+                        break;
+                    case R.id.button7:
+                        targetNumber = gameCycle(targetNumber, buttons[6]);
+                        break;
+                    case R.id.button8:
+                        targetNumber = gameCycle(targetNumber, buttons[7]);
+                        break;
+                    case R.id.button9:
+                        targetNumber = gameCycle(targetNumber, buttons[8]);
+                        break;
+                    case R.id.button10:
+                        targetNumber = gameCycle(targetNumber, buttons[9]);
+                        break;
+                    case R.id.button11:
+                        targetNumber = gameCycle(targetNumber, buttons[10]);
+                        break;
+                    case R.id.button12:
+                        targetNumber = gameCycle(targetNumber, buttons[11]);
+                        break;
+                    case R.id.button13:
+                        targetNumber = gameCycle(targetNumber, buttons[12]);
+                        break;
+                    case R.id.button14:
+                        targetNumber = gameCycle(targetNumber, buttons[13]);
+                        break;
+                    case R.id.button15:
+                        targetNumber = gameCycle(targetNumber, buttons[14]);
+                        break;
+                    case R.id.button16:
+                        targetNumber = gameCycle(targetNumber, buttons[15]);
+                        break;
+                    case R.id.button17:
+                        targetNumber = gameCycle(targetNumber, buttons[16]);
+                        break;
+                    case R.id.button18:
+                        targetNumber = gameCycle(targetNumber, buttons[17]);
+                        break;
+                    case R.id.button19:
+                        targetNumber = gameCycle(targetNumber, buttons[18]);
+                        break;
+                    case R.id.button20:
+                        targetNumber = gameCycle(targetNumber, buttons[19]);
+                        break;
+                }
+            }
+        };
+
+        for(int i = 0; i < 20; i++) {
+            buttons[i].setOnClickListener(clickListener);
+        }
+
     }
 
     public void gameStart() {
-        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(MainActivity.this);
-        myAlertBuilder.setTitle("Game Over");
-        myAlertBuilder.setMessage("Click RANK To Rank, or Cancel to stop");
-        myAlertBuilder.setPositiveButton("RANK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), "pressed Rank", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        myAlertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                textViewTimer.setText(String.valueOf(30));
-                count = 30;
-            }
-        });
-
-        countDownTimer(myAlertBuilder);
+        countDownTimer();
         countDownTimer.start();
-
 
     }
 
-    public void countDownTimer(final AlertDialog.Builder myAlertBuilder) {
+    public void countDownTimer() {
         countDownTimer = new CountDownTimer(MILLISINFUTURE, COUN_DONW_INTEVAL) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -120,6 +174,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 textViewTimer.setText(String.valueOf("Finish"));
+
+                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(MainActivity.this);
+                myAlertBuilder.setTitle("Score is " + score);
+                myAlertBuilder.setMessage("Click RANK To Rank, or Cancel to stop");
+                myAlertBuilder.setPositiveButton("RANK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        gameReset();
+                        Toast.makeText(getApplicationContext(), "pressed Rank", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                myAlertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        gameReset();
+                    }
+                });
                 myAlertBuilder.show();
             }
         };
@@ -134,6 +206,54 @@ public class MainActivity extends AppCompatActivity {
         countDownTimer = null;
     }
 
+    public int[] shuffle(int[] arr) {
+        for(int x = 0; x<arr.length; x++) {
+            int i = (int)(Math.random() * arr.length);
+            int j = (int)(Math.random() * arr.length);
 
+            int tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+
+        return arr;
+    }
+
+    public void setButtonNumber(int[] array) {
+        for(int i = 0; i < 20; i++) {
+            buttons[i].setText(String.valueOf(array[i]));
+        }
+    }
+
+    public int gameCycle(int targetNumber, Button button) {
+        String buttonText = button.getText().toString();
+        int target = targetNumber;
+        if(Integer.parseInt(buttonText) == target) {
+            score +=1;
+            textViewScore.setText(String.valueOf(score));
+            target = (int)(Math.random() * 20) + 1;
+            textViewTarget.setText(String.valueOf(target));
+            shuffle(buttonNumber);
+            setButtonNumber(buttonNumber);
+
+            return target;
+
+        }else {
+            button.setBackgroundColor(0xFFFF0000);
+            return targetNumber;
+        }
+    }
+
+    public void gameReset() {
+        textViewTimer.setText(String.valueOf(30));
+        count = 30;
+        score = 0;
+        textViewScore.setText(String.valueOf(score));
+
+        for(int i = 0; i<20; i++) {
+            buttons[i].setBackgroundColor(0xFFDADADA);
+        }
+
+    }
 
 }
