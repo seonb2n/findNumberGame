@@ -26,11 +26,16 @@ public class RankActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank);
 
+        //Oracle DB 로부터 데이터를 받아와서 랭킹 화면 구성
+
         name = showNameDialog();
 
         Intent intent = getIntent();
         int score = intent.getIntExtra("Score", -9999);
         Toast.makeText(this,"Score is " + score, Toast.LENGTH_LONG).show();
+
+        //score 가 랭킹에 들면 화면에 반영
+        //안들면 Toast Message 출력
 
     }
 
@@ -46,7 +51,7 @@ public class RankActivity extends AppCompatActivity {
                 name = editTextName.getText().toString();
             }
                 }).show();
-        
+
         return name;
     }
 }
