@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -181,8 +182,14 @@ public class MainActivity extends AppCompatActivity {
                 myAlertBuilder.setPositiveButton("RANK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(getApplicationContext(), RankActivity.class);
+                        intent.putExtra("Score", score);
+                        startActivity(intent);
+
                         gameReset();
                         Toast.makeText(getApplicationContext(), "pressed Rank", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
