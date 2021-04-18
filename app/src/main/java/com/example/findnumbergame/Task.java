@@ -1,5 +1,6 @@
 package com.example.findnumbergame;
 
+<<<<<<< HEAD
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -57,4 +58,7 @@ public class Task extends AsyncTask<String, Void, String> {
 
         return receiveMsg;
     }
+=======
+public class Task {
+>>>>>>> origin/master
 }
