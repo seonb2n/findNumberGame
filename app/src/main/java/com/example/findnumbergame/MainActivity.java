@@ -25,10 +25,12 @@ public class MainActivity extends AppCompatActivity {
     Button[] buttons = new Button[20];
     Button buttonStart;
 
+    final int GAME_TIME = 8;
+
     private CountDownTimer countDownTimer;
-    private int MILLISINFUTURE = 30 * 1000;
+    private int MILLISINFUTURE = GAME_TIME * 1000;
     private int COUN_DONW_INTEVAL = 1000;
-    private static int count = 30;
+    private static int count;
 
     int[] buttonNumber = new int[20];
 
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        count = GAME_TIME;
 
         textViewScore = findViewById(R.id.textViewScore);
         textViewTimer = findViewById(R.id.textViewTimer);
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         if(permissonCheck == PackageManager.PERMISSION_GRANTED){
             Toast.makeText(getApplicationContext(), "인터넷 접속 권한 있음", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(getApplicationContext(), "인터넷 접속 권한 있음", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "인터넷 접속 권한 없음", Toast.LENGTH_SHORT).show();
 
             //권한설정 dialog에서 거부를 누르면
             //ActivityCompat.shouldShowRequestPermissionRationale 메소드의 반환값이 true가 된다.
@@ -213,8 +217,6 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
 
                         gameReset();
-                        Toast.makeText(getApplicationContext(), "pressed Rank", Toast.LENGTH_SHORT).show();
-
                     }
                 });
 
@@ -278,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void gameReset() {
         textViewTimer.setText(String.valueOf(30));
-        count = 30;
+        count = GAME_TIME;
         score = 0;
         textViewScore.setText(String.valueOf(score));
 

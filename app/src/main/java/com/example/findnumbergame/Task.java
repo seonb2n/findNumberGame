@@ -24,6 +24,9 @@ public class Task extends AsyncTask<String, Void, String> {
         try {
             String str;
             URL url;
+            if(sendMsg.equals("update_rank")) {
+                sendMsg = "user_name="+strings[0] + "&score=" + strings[1];
+            }
 
             url = new URL(rankUpdateip);
 
@@ -31,6 +34,9 @@ public class Task extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestMethod("POST");
             OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+
+            osw.write(sendMsg);
+            osw.flush();
 
             if (conn.getResponseCode() == conn.HTTP_OK) {
                 InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");

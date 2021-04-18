@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -47,20 +49,13 @@ public class RankActivity extends AppCompatActivity {
 
         String sendMsg = "update_rank";
         String result  = null;
+        Intent intent = getIntent();
+        int score = intent.getIntExtra("Score", -9999);
 
-        try {
-            result = new Task("update_rank").execute().get();
-            rankData = result;
-            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        rankUpdater(rankData, score);
 
         name = showNameDialog();
 
-        Intent intent = getIntent();
-        int score = intent.getIntExtra("Score", -9999);
         //score 가 랭킹에 들면 화면에 반영
         //안들면 Toast Message 출력
 
@@ -78,24 +73,35 @@ public class RankActivity extends AppCompatActivity {
                 name = editTextName.getText().toString();
             }
                 }).show();
-
         return name;
     }
 
-    private void rankUpdater(String rankData) {
-        String str= rankData;
-        String[] array = str.split("$");
-        String[] rankerName = new String[6];
-        String[] rankerScore = new String [6];
-        for(int i = 0; i<array.length; i++){
-            rankerName[i] = array[i].substring(0, array[i].indexOf("#"));
-            rankerScore[i] = array[i].substring(array[i].lastIndexOf("#")+1);
+    private void rankUpdater(String rankData, int score) {
+
+        try {
+            String result = new Task("update_rank").execute(name, String.valueOf(score)).get();
+            Log.i("Return ",result);
+            Toast.makeText(this, "result is " + result, Toast.LENGTH_LONG).show();
+            rankData = result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        for(int i = 0; i < 5; i++) {
-            textViewNames[i].setText(rankerName[i]);
-            textViewScores[i].setText(rankerScore[i]);
+        if(rankData != null) {
+            String str= rankData;
+            String[] array = str.split("@");
+            String[] rankerName = new String[6];
+            String[] rankerScore = new String [6];
+            for(int i = 0; i<array.length; i++){
+                rankerName[i] = array[i].substring(0, array[i].indexOf("#"));
+                rankerScore[i] = array[i].substring(array[i].lastIndexOf("#")+1);
+            }
 
+            for(int i = 0; i < 5; i++) {
+                textViewNames[i].setText(rankerName[i]);
+                textViewScores[i].setText(rankerScore[i]);
+            }
         }
 
     }
