@@ -1,6 +1,5 @@
 package com.example.findnumbergame;
 
-<<<<<<< HEAD
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,8 +24,8 @@ public class Task extends AsyncTask<String, Void, String> {
         try {
             String str;
             URL url;
-            if(sendMsg.equals("update_rank")) {
-                sendMsg = "user_name="+strings[0] + "&score=" + strings[1];
+            if (sendMsg.equals("update_rank")) {
+                sendMsg = "user_name=" + strings[0] + "&score=" + strings[1];
             }
 
             url = new URL(rankUpdateip);
@@ -50,7 +49,7 @@ public class Task extends AsyncTask<String, Void, String> {
             } else {
                 Log.i("통신 결과", conn.getResponseCode() + "에러");
             }
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +57,4 @@ public class Task extends AsyncTask<String, Void, String> {
 
         return receiveMsg;
     }
-=======
-public class Task {
->>>>>>> origin/master
 }
