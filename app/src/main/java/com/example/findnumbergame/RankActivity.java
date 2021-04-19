@@ -51,17 +51,15 @@ public class RankActivity extends AppCompatActivity {
         String result  = null;
         Intent intent = getIntent();
         int score = intent.getIntExtra("Score", -9999);
-
-        rankUpdater(rankData, score);
-
-        name = showNameDialog();
+        rankGetter(rankData, score);
+        name = showNameDialog(score);
 
         //score 가 랭킹에 들면 화면에 반영
         //안들면 Toast Message 출력
 
     }
 
-    private String showNameDialog() {
+    private String showNameDialog(final int score) {
         LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout nameLayout = (LinearLayout) vi.inflate(R.layout.inputdialog, null);
 
@@ -71,6 +69,7 @@ public class RankActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 name = editTextName.getText().toString();
+                rankUpdater(rankData, score);
             }
                 }).show();
         return name;
@@ -81,7 +80,6 @@ public class RankActivity extends AppCompatActivity {
         try {
             String result = new Task("update_rank").execute(name, String.valueOf(score)).get();
             Log.i("Return ",result);
-            Toast.makeText(this, "result is " + result, Toast.LENGTH_LONG).show();
             rankData = result;
 
         } catch (Exception e) {
@@ -104,5 +102,30 @@ public class RankActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void rankGetter(String rankData, int score) {
+        try {
+            String result = new Task("get_rank").execute(name, String.valueOf(score)).get();
+            rankData = result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(rankData != null) {
+            String str= rankData;
+            String[] array = str.split("@");
+            String[] rankerName = new String[6];
+            String[] rankerScore = new String [6];
+            for(int i = 0; i<array.length; i++){
+                rankerName[i] = array[i].substring(0, array[i].indexOf("#"));
+                rankerScore[i] = array[i].substring(array[i].lastIndexOf("#")+1);
+            }
+
+            for(int i = 0; i < 5; i++) {
+                textViewNames[i].setText(rankerName[i]);
+                textViewScores[i].setText(rankerScore[i]);
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button[] buttons = new Button[20];
     Button buttonStart;
 
-    final int GAME_TIME = 8;
+    final int GAME_TIME = 30;
 
     private CountDownTimer countDownTimer;
     private int MILLISINFUTURE = GAME_TIME * 1000;

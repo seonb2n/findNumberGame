@@ -14,6 +14,7 @@ import java.net.URL;
 public class Task extends AsyncTask<String, Void, String> {
     String sendMsg, receiveMsg;
     String rankUpdateip = "http://sbsbhome.duckdns.org:8090/testPjt/rankUpdate.jsp";
+    String rankGetip = "http://sbsbhome.duckdns.org:8090/testPjt/rankGet.jsp";
 
     Task(String sendMsg) {
         this.sendMsg = sendMsg;
@@ -26,9 +27,11 @@ public class Task extends AsyncTask<String, Void, String> {
             URL url;
             if (sendMsg.equals("update_rank")) {
                 sendMsg = "user_name=" + strings[0] + "&score=" + strings[1];
+                url = new URL(rankUpdateip);
+            } else {
+                sendMsg = "user_name=" + strings[0] + "&score=" + strings[1];
+                url = new URL(rankGetip);
             }
-
-            url = new URL(rankUpdateip);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
