@@ -3,20 +3,12 @@ package com.example.findnumbergame;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,16 +38,10 @@ public class RankActivity extends AppCompatActivity {
         textViewScores[3] = findViewById(R.id.textViewScoreFour);
         textViewScores[4] = findViewById(R.id.textViewScoreFive);
 
-
-        String sendMsg = "update_rank";
-        String result  = null;
         Intent intent = getIntent();
         int score = intent.getIntExtra("Score", -9999);
         rankGetter(rankData, score);
         name = showNameDialog(score);
-
-        //score 가 랭킹에 들면 화면에 반영
-        //안들면 Toast Message 출력
 
     }
 
@@ -86,21 +72,7 @@ public class RankActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(rankData != null) {
-            String str= rankData;
-            String[] array = str.split("@");
-            String[] rankerName = new String[6];
-            String[] rankerScore = new String [6];
-            for(int i = 0; i<array.length; i++){
-                rankerName[i] = array[i].substring(0, array[i].indexOf("#"));
-                rankerScore[i] = array[i].substring(array[i].lastIndexOf("#")+1);
-            }
-
-            for(int i = 0; i < 5; i++) {
-                textViewNames[i].setText(rankerName[i]);
-                textViewScores[i].setText(rankerScore[i]);
-            }
-        }
+        textViewSetter(rankData);
 
     }
 
@@ -112,20 +84,28 @@ public class RankActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(rankData != null) {
-            String str= rankData;
-            String[] array = str.split("@");
-            String[] rankerName = new String[6];
-            String[] rankerScore = new String [6];
-            for(int i = 0; i<array.length; i++){
-                rankerName[i] = array[i].substring(0, array[i].indexOf("#"));
-                rankerScore[i] = array[i].substring(array[i].lastIndexOf("#")+1);
-            }
+        textViewSetter(rankData);
 
-            for(int i = 0; i < 5; i++) {
-                textViewNames[i].setText(rankerName[i]);
-                textViewScores[i].setText(rankerScore[i]);
-            }
+    }
+
+    public int textViewSetter(String data) {
+        if(data == null) {
+            return 0;
         }
+        String str= data;
+        String[] array = str.split("@");
+        String[] rankerName = new String[6];
+        String[] rankerScore = new String [6];
+        for(int i = 0; i<array.length; i++){
+            rankerName[i] = array[i].substring(0, array[i].indexOf("#"));
+            rankerScore[i] = array[i].substring(array[i].lastIndexOf("#")+1);
+        }
+
+        for(int i = 0; i < 5; i++) {
+            textViewNames[i].setText(rankerName[i]);
+            textViewScores[i].setText(rankerScore[i]);
+        }
+
+        return 1;
     }
 }
